@@ -1,8 +1,16 @@
-
+/*
+Class: ConsultantClerkController
+Description: Bridge between the FXML portion of the application and the logic portion.
+Created: 30/03/2020
+Updated: 03/04/2020
+Author/s: Michael Tonkin.
+*/
 package hospmansys.ui;
 
 import hospmansys.ReferralReport;
 import hospmansys.staff.ConsultantClerk;
+import hospmansys.utils.PopupBox;
+import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +19,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -28,11 +38,9 @@ public class ConsultantClerkController implements Initializable {
     @FXML private TableColumn dobCol;
     @FXML private TableColumn rsCol;
     @FXML private TextArea expandedReportBox;
-    @FXML private ComboBox permissionsSelect;
+    @FXML private CheckBox checkSCS;
+    @FXML private CheckBox checkPIC;
     @FXML private Button uploadBtn;
-    private CheckBox option1 = new CheckBox("Patient Insurance Company #1");
-    private CheckBox option2 = new CheckBox("Patient Insurance Company #2");
-    private CheckBox option3 = new CheckBox("Surgery Clinic");
     
     
     private ObservableList reportsList()
@@ -61,16 +69,22 @@ public class ConsultantClerkController implements Initializable {
     }
     
     @FXML
-    public void onUploadClicked()
+    public void onUploadClicked() throws IOException
     {
         ReferralReport selectedProperty = reportTable.getSelectionModel().getSelectedItem();
         if(selectedProperty == null)
         {
-            System.out.println("Null selectedProperty ln 78");
+            PopupBox popup = new PopupBox("Failure! Please select a report and try again.");
+        }
+        else if(!(checkSCS.isSelected()) && !(checkPIC.isSelected()))
+        {
+            PopupBox popup = new PopupBox("Failure! Please select either Surgery"
+                    + " Clinic System or Patient Insurance Company or both.");
         }
         else
         {
-            ConsultantClerk.saveReferral(selectedProperty, "null");
+            ConsultantClerk.saveReferral(selectedProperty, checkSCS.isSelected(), checkPIC.isSelected());
+            PopupBox popup = new PopupBox("Upload successful!");
         }
     }
     

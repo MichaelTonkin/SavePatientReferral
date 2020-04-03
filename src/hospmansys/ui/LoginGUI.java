@@ -17,6 +17,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -34,10 +35,10 @@ public class LoginGUI extends Application {
     
     @Override
     public void start(Stage primaryStage) throws IOException {
-        //Parent root = FXMLLoader.load(getClass().getResource("fxml/LoginFXML.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("fxml/ConsultantClerkFXML.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("fxml/LoginFXML.fxml"));
         primaryStage.setTitle("HospManSys Login");
         primaryStage.setScene(new Scene(root));
+        primaryStage.setResizable(false);
         primaryStage.show();
 
     }
@@ -51,7 +52,7 @@ public class LoginGUI extends Application {
     {
         String usr = userField.getText();
         String pas = passField.getText();
-        System.out.println(usr);
+        
         if(Login.userLogin(usr, pas) == 'c')
         {
         Parent root = FXMLLoader.load(getClass().getResource("fxml/ConsultantClerkFXML.fxml"));
@@ -60,11 +61,17 @@ public class LoginGUI extends Application {
         Stage window = (Stage)((Node)e.getSource()).getScene().getWindow();
         window.setTitle("Patient Referral Reports");
         window.setScene(scene);
+        window.setResizable(false);
         window.show();
         }
         else if (Login.userLogin(usr, pas) == 'd')
         {
-            loginError.setText("Incorrect username or password. Please re-enter login information and try again.");
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("");
+            alert.setHeaderText(null);
+            alert.setContentText("Login failed! Please try again with the correct username and password.");
+
+            alert.showAndWait();
         }
         
     }

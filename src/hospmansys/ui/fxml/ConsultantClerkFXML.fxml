@@ -38,12 +38,12 @@
             <Font size="13.0" />
          </font>
       </TextArea>
-      <CheckBox layoutX="16.0" layoutY="398.0" mnemonicParsing="false" text="Surgery Clinic System">
+      <CheckBox fx:id="checkSCS" layoutX="16.0" layoutY="398.0" mnemonicParsing="false" text="Surgery Clinic System">
          <font>
             <Font size="14.0" />
          </font>
       </CheckBox>
-      <CheckBox layoutX="15.0" layoutY="422.0" mnemonicParsing="false" text="Patient's Insurance Company">
+      <CheckBox fx:id="checkPIC" layoutX="15.0" layoutY="422.0" mnemonicParsing="false" text="Patient's Insurance Company">
          <font>
             <Font size="14.0" />
          </font>
