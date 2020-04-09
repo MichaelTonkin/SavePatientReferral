@@ -15,8 +15,13 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -30,6 +35,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.WindowEvent;
 
 public class ConsultantClerkController implements Initializable {
     
@@ -41,7 +47,7 @@ public class ConsultantClerkController implements Initializable {
     @FXML private CheckBox checkSCS;
     @FXML private CheckBox checkPIC;
     @FXML private Button uploadBtn;
-    
+
     
     private ObservableList reportsList()
     {
@@ -58,6 +64,8 @@ public class ConsultantClerkController implements Initializable {
         dobCol.setCellValueFactory(new PropertyValueFactory<ReferralReport, String>("DoB"));
         rsCol.setCellValueFactory(new PropertyValueFactory<ReferralReport, String>("ReferralData"));
         reportTable.getItems().setAll(reportsList());        
+        
+       
     }
     
     @FXML

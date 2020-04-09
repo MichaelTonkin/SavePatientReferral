@@ -166,7 +166,7 @@ public class DatabaseManagementSystem {
 	      String sql;
 	      //we are selecting all details from the row that contains the id passed
 	      //into parameters
-	      sql = "UPDATE " + table + " SET " + cols_new_val + " WHERE " + id;										
+	      sql = "UPDATE " + table + " SET " + cols_new_val + " WHERE id = " + id;										
 	      int rs = statement.executeUpdate(sql);
 	      System.out.println("table updated");
 	      }

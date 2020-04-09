@@ -3,6 +3,7 @@ package hospmansys.staff;
 
 import hospmansys.ReferralReport;
 import hospmansys.database.DatabaseManagementSystem;
+import hospmansys.database.Firewall;
 import hospmansys.utils.PopupBox;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,27 +22,30 @@ public class ConsultantClerk extends Staff{
     
     public static void saveReferral(ReferralReport ref, Boolean permSCS, Boolean permPIC)
     {
-        System.out.println(ref.getSurname() + ", " + ref.getDoB() + ", " + ref.getReferralData() + ", " + permSCS + ", " + permPIC);
-        try
+        Firewall fw = new Firewall();
+        if(fw.scanData(ref.getSurname() + ", " + ref.getDoB() + ", " + ref.getReferralData() + ", " + permSCS + ", " + permPIC))
         {
+            try
+            {
 
-            //first we convert the permissions booleans to something our database can understand
-            int convertSCS = 0;
-            int convertPIC = 0;
-            if(permSCS)
-                convertSCS = 1;
-            if(permPIC)
-                convertPIC = 1;
+                //first we convert the permissions booleans to something our database can understand
+                int convertSCS = 0;
+                int convertPIC = 0;
+                if(permSCS)
+                    convertSCS = 1;
+                if(permPIC)
+                    convertPIC = 1;
 
-            //This is where the actual upload takes place
-            DatabaseManagementSystem db = new DatabaseManagementSystem();
-            db.connectToDB();
-            db.createEntry("referral_reports", 
-                    "surname, dob, referral_data, permSCS, permPIC", 
-                    "\"" + ref.getSurname() + "\", \"" + ref.getDoB() + "\", \"" + ref.getReferralData() + "\", \"" + convertSCS + "\", \"" + convertPIC + "\"");
-        }catch(Exception e)
-        {
-            PopupBox failbox = new PopupBox("Upload unsuccessful. Please request assistance from your system administrator.");
+                //This is where the actual upload takes place
+                DatabaseManagementSystem db = new DatabaseManagementSystem();
+                db.connectToDB();
+                db.createEntry("referral_reports", 
+                        "surname, dob, referral_data, permSCS, permPIC", 
+                        "\"" + ref.getSurname() + "\", \"" + ref.getDoB() + "\", \"" + ref.getReferralData() + "\", \"" + convertSCS + "\", \"" + convertPIC + "\"");
+            }catch(Exception e)
+            {
+                PopupBox failbox = new PopupBox("Upload unsuccessful. Please request assistance from your system administrator.");
+            }
         }
     }
     

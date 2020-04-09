@@ -21,7 +21,7 @@
             <Font size="19.0" />
          </font>
       </Label>
-      <Button fx:id="uploadBtn" layoutX="489.0" layoutY="393.0" mnemonicParsing="false" onAction="#onUploadClicked" text="Upload">
+      <Button fx:id="uploadBtn" defaultButton="true" layoutX="429.0" layoutY="430.0" mnemonicParsing="false" onAction="#onUploadClicked" text="Upload">
          <font>
             <Font size="13.0" />
          </font>
@@ -48,5 +48,10 @@
             <Font size="14.0" />
          </font>
       </CheckBox>
+      <Button layoutX="523.0" layoutY="430.0" mnemonicParsing="false" text="Logout">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
