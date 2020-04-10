@@ -1,4 +1,7 @@
-
+/*
+Class: PopupBox
+Description: generic utility to generate a popup box.
+*/
 package hospmansys.utils;
 
 import javafx.scene.control.Alert;

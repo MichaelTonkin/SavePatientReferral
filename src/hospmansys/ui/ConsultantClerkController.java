@@ -56,6 +56,11 @@ public class ConsultantClerkController implements Initializable {
         return data;
     }
     
+    /*
+    Method: initialize
+    Description: used to populate the gui.
+    Parameters: All are handled by javaFX. Just leave it alone.
+    */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
@@ -67,29 +72,37 @@ public class ConsultantClerkController implements Initializable {
         
        
     }
-    
+    /*
+    Method: onRowSelected
+    Description: handles when row in the referrals list is selected.
+    */
     @FXML
     public void onRowSelected()
     {
      ReferralReport selectedProperty = reportTable.getSelectionModel().getSelectedItem();   
      
-     expandedReportBox.setText(selectedProperty.getReferralData());
+     expandedReportBox.setText(selectedProperty.getReferralData()); //put the referral into the box below.
     }
     
+    /*
+    Method: onUploadClicked
+    Description: handles what happens when the upload button is clicked.
+    */
     @FXML
     public void onUploadClicked() throws IOException
     {
-        ReferralReport selectedProperty = reportTable.getSelectionModel().getSelectedItem();
-        if(selectedProperty == null)
+        ReferralReport selectedProperty = reportTable.getSelectionModel().getSelectedItem(); //get the currently selected item
+        
+        if(selectedProperty == null) //if nothing is selected
         {
             PopupBox popup = new PopupBox("Failure! Please select a report and try again.");
         }
-        else if(!(checkSCS.isSelected()) && !(checkPIC.isSelected()))
+        else if(!(checkSCS.isSelected()) && !(checkPIC.isSelected())) //if only half the needed items are selected
         {
             PopupBox popup = new PopupBox("Failure! Please select either Surgery"
                     + " Clinic System or Patient Insurance Company or both.");
         }
-        else
+        else //if everything is selected we can go ahead and upload
         {
             ConsultantClerk.saveReferral(selectedProperty, checkSCS.isSelected(), checkPIC.isSelected());
             PopupBox popup = new PopupBox("Upload successful!");

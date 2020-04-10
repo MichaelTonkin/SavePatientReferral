@@ -2,7 +2,7 @@
 Class: LoginGUI
 Description: The controller class for the login screen ui. 
 Created: 31/03/20
-Updated: 01/04/20
+Updated: 10/04/20
 Author/s: Michael Tonkin.
  */
 package hospmansys.ui;
@@ -52,7 +52,13 @@ public class LoginGUI extends Application {
     private boolean newRound = true;
     private Stage window = new Stage();
     private Stage primaryStage;
+    private boolean running = true;
     
+    /*
+    Method: start
+    Description: launches the login screen
+    Parameters: Stage primaryStage - required by javaFX. Leave it alone.
+    */
     @Override
     public void start(Stage primaryStage) throws IOException {
         Parent root = FXMLLoader.load(getClass().getResource("fxml/LoginFXML.fxml"));
@@ -80,13 +86,24 @@ public class LoginGUI extends Application {
         launch(args);
     }
 
+    /*
+    Method: onLoginClicked
+    Description: Handles what happens when athe login button is clicked. 
+    Parameters: ActionEvent e - identifies the click event.
+    */
     @FXML
     public void onLoginClicked(ActionEvent e) throws IOException {
+        
+        loginBtn.getScene().getWindow().hide();
+        
+        //get the username and password from the gui.
         String usr = userField.getText();
         String pas = passField.getText();
-
-        if (Login.userLogin(usr, pas) == 'c') {            
-            startTask();
+        
+        //check if the correct username and password has been used
+        if (Login.userLogin(usr, pas) == 'c') {    //if we have the correct credentials        
+            startCounter();//start the logout timer
+            //launch the consultant clerk gui.
             Parent root = FXMLLoader.load(getClass().getResource("fxml/ConsultantClerkFXML.fxml"));
             Scene scene = new Scene(root);
             //set stage to window and get stage information
@@ -104,8 +121,9 @@ public class LoginGUI extends Application {
                     System.exit(0);
                 }
             });
-            primaryStage.hide();
-        } else if (Login.userLogin(usr, pas) == 'd') {
+            
+        } else if (Login.userLogin(usr, pas) == 'd') { //if wrong credentials are entered
+            //display an error message to the user
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("");
             alert.setHeaderText(null);
@@ -116,6 +134,10 @@ public class LoginGUI extends Application {
 
     }
 
+    /*
+    Method: returnToLogin
+    Description: Called in the logout timer - ends consultant clerk session and returns to login
+    */
     public void returnToLogin() {
         try {
             window.close();
@@ -133,11 +155,15 @@ public class LoginGUI extends Application {
         }
     }
 
-    public void startTask() {
+    /*
+    Method: startCounter
+    Description: Creates a new thread for handing the logout timer
+    */
+    public void startCounter() {
         // Create a Runnable
         Runnable task = new Runnable() {
             public void run() {
-                runTask();
+                runCounter();
             }
         };
 
@@ -149,14 +175,20 @@ public class LoginGUI extends Application {
         backgroundThread.start();
     }
     
-    public void runTask() {
-        while(timeRemaining > -1)
+    /*
+    Method: runCounter
+    Description: handles logic for logout timer. See startCounter.
+    */
+    public void runCounter() {
+        while(timeRemaining > -1 && running)
         {
             try {
-                // Update the Label on the JavaFx Application Thread        
+                        
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
+                        //first run update old mouse lociation, second run update new mouse location
+                        //these two variables will be comapred later
                         if (newRound) {
                                 oldLoc = MouseInfo.getPointerInfo().getLocation();
                                 newRound = false;
@@ -175,9 +207,11 @@ public class LoginGUI extends Application {
                             System.out.println(timeRemaining);
                             System.out.println(oldLoc);
                             System.out.println(newLoc);
-
+                            
+                            //if enough time has elapsed without any mouse activity
                             if (timeRemaining == 0) {
-                                    returnToLogin();
+                                    returnToLogin(); //logout.
+                                    running = false; //stop the thread
                             }
                     }
                 });
