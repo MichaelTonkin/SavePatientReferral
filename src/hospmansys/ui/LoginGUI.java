@@ -8,6 +8,7 @@ Author/s: Michael Tonkin.
 package hospmansys.ui;
 
 import hospmansys.staff.Login;
+import hospmansys.utils.PopupBox;
 import java.awt.MouseInfo;
 import java.awt.Point;
 import java.io.IOException;
@@ -45,14 +46,13 @@ public class LoginGUI extends Application {
     @FXML
     private Label loginError;
     
-    private final int MAX_TIME_REMAINING = 2;
+    private final int MAX_TIME_REMAINING = 600;
     private int timeRemaining = MAX_TIME_REMAINING;
     private Point oldLoc;
     private Point newLoc;
     private boolean newRound = true;
     private Stage window = new Stage();
-    private Stage primaryStage;
-    private boolean running = true;
+    private static boolean running = true;
     
     /*
     Method: start
@@ -78,7 +78,6 @@ public class LoginGUI extends Application {
             }
         });
 
-        this.primaryStage = primaryStage;
         }
 
 
@@ -180,6 +179,9 @@ public class LoginGUI extends Application {
     Description: handles logic for logout timer. See startCounter.
     */
     public void runCounter() {
+        
+        running = true;
+        
         while(timeRemaining > -1 && running)
         {
             try {
@@ -208,6 +210,12 @@ public class LoginGUI extends Application {
                             System.out.println(oldLoc);
                             System.out.println(newLoc);
                             
+                            //warn the user if they are about to be logged out
+                            if (timeRemaining == 60)
+                            {
+                                PopupBox warning = new PopupBox("No activity detected - system will log out in 60 seconds. Click 'ok' to cancel.");
+                            }
+                            
                             //if enough time has elapsed without any mouse activity
                             if (timeRemaining == 0) {
                                     returnToLogin(); //logout.
@@ -221,6 +229,16 @@ public class LoginGUI extends Application {
                 e.printStackTrace();
             }
         }
+    }
+    
+    public static void setTimerRunning(boolean setRunning)
+    {
+        running = setRunning;
+    }
+    
+    public static boolean getTimerRunning()
+    {
+        return running;
     }
 }
 

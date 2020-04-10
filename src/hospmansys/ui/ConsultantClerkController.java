@@ -4,7 +4,7 @@ Description: Bridge between the FXML portion of the application and the logic po
 Created: 30/03/2020
 Updated: 03/04/2020
 Author/s: Michael Tonkin.
-*/
+ */
 package hospmansys.ui;
 
 import hospmansys.ReferralReport;
@@ -23,7 +23,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -35,78 +38,101 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 public class ConsultantClerkController implements Initializable {
-    
-    @FXML private TableView<ReferralReport> reportTable;
-    @FXML private TableColumn surnameCol;
-    @FXML private TableColumn dobCol;
-    @FXML private TableColumn rsCol;
-    @FXML private TextArea expandedReportBox;
-    @FXML private CheckBox checkSCS;
-    @FXML private CheckBox checkPIC;
-    @FXML private Button uploadBtn;
 
+    @FXML
+    private TableView<ReferralReport> reportTable;
+    @FXML
+    private TableColumn surnameCol;
+    @FXML
+    private TableColumn dobCol;
+    @FXML
+    private TableColumn rsCol;
+    @FXML
+    private TextArea expandedReportBox;
+    @FXML
+    private CheckBox checkSCS;
+    @FXML
+    private CheckBox checkPIC;
+    @FXML
+    private Button uploadBtn;
+    @FXML
+    private Button logoutBtn;
     
-    private ObservableList reportsList()
-    {
-        List list = ConsultantClerk.getReports(); 
+    private ObservableList reportsList() {
+        List list = ConsultantClerk.getReports();
         ObservableList data = FXCollections.observableList(list);
         return data;
     }
-    
+
     /*
     Method: initialize
     Description: used to populate the gui.
     Parameters: All are handled by javaFX. Just leave it alone.
-    */
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
+
         //initialize the referral reports table
         surnameCol.setCellValueFactory(new PropertyValueFactory<ReferralReport, String>("Surname"));
         dobCol.setCellValueFactory(new PropertyValueFactory<ReferralReport, String>("DoB"));
         rsCol.setCellValueFactory(new PropertyValueFactory<ReferralReport, String>("ReferralData"));
-        reportTable.getItems().setAll(reportsList());        
-        
-       
+        reportTable.getItems().setAll(reportsList());
+
     }
+
     /*
     Method: onRowSelected
     Description: handles when row in the referrals list is selected.
-    */
+     */
     @FXML
-    public void onRowSelected()
-    {
-     ReferralReport selectedProperty = reportTable.getSelectionModel().getSelectedItem();   
-     
-     expandedReportBox.setText(selectedProperty.getReferralData()); //put the referral into the box below.
+    public void onRowSelected() {
+        ReferralReport selectedProperty = reportTable.getSelectionModel().getSelectedItem();
+
+        expandedReportBox.setText(selectedProperty.getReferralData()); //put the referral into the box below.
     }
-    
+
     /*
     Method: onUploadClicked
     Description: handles what happens when the upload button is clicked.
-    */
+     */
     @FXML
-    public void onUploadClicked() throws IOException
-    {
+    public void onUploadClicked() throws IOException {
         ReferralReport selectedProperty = reportTable.getSelectionModel().getSelectedItem(); //get the currently selected item
-        
-        if(selectedProperty == null) //if nothing is selected
+
+        if (selectedProperty == null) //if nothing is selected
         {
             PopupBox popup = new PopupBox("Failure! Please select a report and try again.");
-        }
-        else if(!(checkSCS.isSelected()) && !(checkPIC.isSelected())) //if only half the needed items are selected
+        } else if (!(checkSCS.isSelected()) && !(checkPIC.isSelected())) //if only half the needed items are selected
         {
             PopupBox popup = new PopupBox("Failure! Please select either Surgery"
                     + " Clinic System or Patient Insurance Company or both.");
-        }
-        else //if everything is selected we can go ahead and upload
+        } else //if everything is selected we can go ahead and upload
         {
             ConsultantClerk.saveReferral(selectedProperty, checkSCS.isSelected(), checkPIC.isSelected());
             PopupBox popup = new PopupBox("Upload successful!");
+            reportTable.getItems().remove(selectedProperty); //remove the uploaded item.
         }
     }
-    
+
+    @FXML
+    public void onLogoutBtnClick() throws IOException{
+        
+        logoutBtn.getScene().getWindow().hide();//hide this current window
+        LoginGUI.setTimerRunning(false); //stop the logout timer
+        
+        Parent root = FXMLLoader.load(getClass().getResource("fxml/LoginFXML.fxml"));
+        Scene scene = new Scene(root);
+        
+        //set stage to window and get stage information
+        Stage window = new Stage();
+        window.setTitle("Patient Referral Reports");
+        window.setScene(scene);
+        window.setResizable(false);
+        window.show();
+    }
+
 }

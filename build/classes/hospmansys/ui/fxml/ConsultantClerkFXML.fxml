@@ -48,7 +48,7 @@
             <Font size="14.0" />
          </font>
       </CheckBox>
-      <Button layoutX="523.0" layoutY="430.0" mnemonicParsing="false" text="Logout">
+      <Button fx:id="logoutBtn" layoutX="523.0" layoutY="430.0" mnemonicParsing="false" onAction="#onLogoutBtnClick" text="Logout">
          <font>
             <Font size="13.0" />
          </font>

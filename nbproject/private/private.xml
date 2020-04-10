@@ -6,7 +6,9 @@
             <file>file:/E:/Documents/NetBeansProjects/SavePatientReferral/src/hospmansys/ui/ConsultantClerkController.java</file>
             <file>file:/E:/Documents/NetBeansProjects/SavePatientReferral/src/hospmansys/utils/PopupBox.java</file>
             <file>file:/E:/Documents/NetBeansProjects/SavePatientReferral/src/hospmansys/ui/LoginGUI.java</file>
+            <file>file:/E:/Documents/NetBeansProjects/SavePatientReferral/src/hospmansys/ui/fxml/LoginFXML.fxml</file>
             <file>file:/E:/Documents/NetBeansProjects/SavePatientReferral/src/hospmansys/database/Firewall.java</file>
+            <file>file:/E:/Documents/NetBeansProjects/SavePatientReferral/src/hospmansys/ui/fxml/ConsultantClerkFXML.fxml</file>
         </group>
     </open-files>
 </project-private>
