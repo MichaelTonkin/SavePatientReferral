@@ -205,10 +205,6 @@ public class LoginGUI extends Application {
                             } else {
                                 timeRemaining = MAX_TIME_REMAINING; //reset the timer
                             }
-
-                            System.out.println(timeRemaining);
-                            System.out.println(oldLoc);
-                            System.out.println(newLoc);
                             
                             //warn the user if they are about to be logged out
                             if (timeRemaining == 60)
